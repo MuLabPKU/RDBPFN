@@ -1,0 +1,11 @@
+defaults:
+  - base_model
+  - _self_
+
+name: autogluon
+checkpoint_path: null
+autogluon:
+  preset: medium
+  time_limit: 60
+  hyperparameters: null
+eval_chunk_size_override: null

@@ -1,0 +1,17 @@
+train:
+  sampled_columns: null
+  targets_per_subset: 0
+  num_epochs: 1
+  group_size_for_augment_data: 1
+  num_gpus: 1
+  weight_decay: 0.0
+  gradient_accumulation_steps: 1
+  global_column_modify_config:
+    noise_columns_range: [0, 0]
+    noise_high_cardinality_prob: 0.5
+    noise_low_cardinality_max: 5
+    noise_scale: 1.0
+    transform_columns_range: [0, 0]
+    transform_scale_range: [0.5, 2.0]
+    transform_shift_range: [-0.5, 0.5]
+    transform_noise_scale: [0.0, 0.25]

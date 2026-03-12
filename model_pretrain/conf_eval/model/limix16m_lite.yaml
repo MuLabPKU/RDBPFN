@@ -1,0 +1,11 @@
+defaults:
+  - base_model
+  - _self_
+
+name: limix16m
+checkpoint_path: LimiX/cache/LimiX-16M.ckpt
+limix:
+  model_path: LimiX/cache/LimiX-16M.ckpt
+  inference_config: LimiX/config/cls_default_1est.json
+  config_name: null
+  variant: 16M

@@ -1,0 +1,4 @@
+defaults:
+  - model: RDBPFN
+  - dataset: clf_npz
+  - _self_

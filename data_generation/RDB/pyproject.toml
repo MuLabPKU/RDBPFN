@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rdb-data-generation"
+version = "0.1.0"
+description = "Minimal dependency manifest for the RDB data generation pipeline."
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "pydantic<2",
+    "PyYAML",
+    "scipy",
+    "networkx",
+    "torch",
+    "pyarrow",
+]
+
+[tool.setuptools]
+packages = []

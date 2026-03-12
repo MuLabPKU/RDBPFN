@@ -1,0 +1,13 @@
+defaults:
+  - base_model
+  - _self_
+
+name: autogluon
+checkpoint_path: null
+autogluon:
+  preset: null
+  time_limit: null
+  hyperparameters:
+    MITRA:
+      fine_tune: false
+eval_chunk_size_override: null

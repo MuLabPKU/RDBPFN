@@ -1,0 +1,11 @@
+defaults:
+  - base_model
+  - _self_
+
+name: limix2m
+checkpoint_path: LimiX/cache/LimiX-2M.ckpt
+limix:
+  model_path: LimiX/cache/LimiX-2M.ckpt
+  inference_config: LimiX/config/cls_default_noretrieval.json
+  config_name: null
+  variant: 2M

@@ -1,0 +1,8 @@
+defaults:
+  - base_model
+  - _self_
+
+name: tabpfnv2
+checkpoint_path: null
+tabpfn:
+  n_estimators: null

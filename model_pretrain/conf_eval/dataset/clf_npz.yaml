@@ -1,0 +1,9 @@
+dirs:
+  - datasets/clf
+mode: resample
+csv_pattern: "*.csv"
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+max_train_samples: 1000
+max_test_samples: 10000
+eval_chunk_size: 1000
+test_size: 0.3

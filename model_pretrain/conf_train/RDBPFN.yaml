@@ -1,0 +1,86 @@
+defaults:
+  - base_train
+  - _self_
+
+seed: 0
+
+train:
+  datasets:
+    - path: pretrain_datasets/RDB_small_woGNN_1hop_1.h5
+      weight: 1.0
+      sampled_columns: 30
+      targets_per_subset: 6
+      group_size_for_augment_data: 2
+    - path: pretrain_datasets/RDB_small_woGNN_1hop_2.h5
+      weight: 1.0
+      sampled_columns: 30
+      targets_per_subset: 6
+      group_size_for_augment_data: 2
+    - path: pretrain_datasets/RDB_small_wGNN_1hop_1.h5
+      weight: 1.0
+      sampled_columns: 30
+      targets_per_subset: 6
+      group_size_for_augment_data: 2
+    - path: pretrain_datasets/RDB_small_wGNN_1hop_2.h5
+      weight: 1.0
+      sampled_columns: 30
+      targets_per_subset: 6
+      group_size_for_augment_data: 2
+    - path: pretrain_datasets/RDB_small_woGNN_2hop_1.h5
+      weight: 2.0
+      sampled_columns: 30
+      targets_per_subset: 6
+      group_size_for_augment_data: 2
+    - path: pretrain_datasets/RDB_small_wGNN_2hop_1.h5
+      weight: 2.0
+      sampled_columns: 30
+      targets_per_subset: 6
+      group_size_for_augment_data: 2
+    - path: pretrain_datasets/RDB_large_woGNN_1hop_1.h5
+      weight: 3.0
+      sampled_columns: 30
+      targets_per_subset: 6
+      group_size_for_augment_data: 2
+    - path: pretrain_datasets/RDB_large_wGNN_1hop_1.h5
+      weight: 3.0
+      sampled_columns: 30
+      targets_per_subset: 6
+      group_size_for_augment_data: 2
+    - path: pretrain_datasets/single_table_stage2.h5
+      weight: 1.0
+      sampled_columns: null
+      targets_per_subset: 0
+      group_size_for_augment_data: 0
+  
+  num_gpus: 8
+  num_epochs: 1
+  num_steps: 2200000
+  batch_size: 1
+  lr: 0.001
+  steps_per_eval: 200
+  save_every_evals: 8
+  load_model_path: checkpoints/RDBPFN_single/model_eval00360.pt
+  save_model_path: checkpoints/RDBPFN/model.pt 
+
+model:
+  type: base
+  embedding_size: 96
+  num_attention_heads: 4
+  mlp_hidden_size: 192
+  num_layers: 6
+  num_outputs: 2
+  num_category_buckets: 10
+  per_column_embeddings: false
+  sort_category_embeddings: false
+  invariant_noise_encoder: false
+  dual_feature_attention: false
+  category_as_numeric: false
+
+eval:
+  csv_dirs: [datasets/clf] 
+
+wandb:
+  enabled: false
+  project: RDBPFN
+  run_name: RDBPFN
+

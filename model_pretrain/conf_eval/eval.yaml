@@ -1,0 +1,7 @@
+defaults:
+  - dataset: full
+  - model: RDBPFN
+  - _self_
+
+# Optional: path to a shared CSV for appending results
+append_output_path: null

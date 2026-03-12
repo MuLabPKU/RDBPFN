@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python src/tabicl/prior/genload.py  --save_dir ../single_table_datasets/single_table_stage1 --np_seed 42  --torch_seed 42  --num_batches 600000  --resume_from 0  --batch_size 1  --batch_size_per_gp 1   --prior_type mix_scm  --min_features 18 --max_features 18  --max_classes 2  --max_seq_len 600  --min_train_size 0.5  --max_train_size 0.9  --n_jobs -1  --num_threads_per_generate 1  --device cpu
+
+python src/tabicl/prior/genload.py  --save_dir ../single_table_datasets/single_table_stage2  --np_seed 42  --torch_seed 42  --num_batches 600000  --resume_from 0  --batch_size 1  --batch_size_per_gp 1   --prior_type mix_scm  --min_features 30 --max_features 30  --max_classes 2  --max_seq_len 600  --min_train_size 0.5  --max_train_size 0.9  --n_jobs -1  --num_threads_per_generate 1  --device cpu

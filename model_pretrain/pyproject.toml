@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rdbpfn-model-pretrain"
+version = "0.1.0"
+description = "Dependency manifest for RDB_PFN model pretraining and evaluation."
+requires-python = ">=3.9,<3.13"
+dependencies = [
+    "accelerate",
+    "autogluon.tabular[all]",
+    "h5py",
+    "hydra-core",
+    "numpy",
+    "omegaconf",
+    "openml",
+    "pandas",
+    "PyYAML",
+    "schedulefree",
+    "scikit-learn",
+    "seaborn",
+    "wandb",
+    "xgboost",
+    "huggingface-hub",
+]
+
+[project.optional-dependencies]
+all-baselines = [
+    "tabpfn==6.0.6",
+    "tabicl==0.1.3",
+]
+
+[tool.setuptools]
+packages = []

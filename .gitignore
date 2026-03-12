@@ -1,0 +1,22 @@
+# Python caches and build artifacts
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Large model artifacts
+*.h5
+*.ckpt
+
+# Generated datasets and preprocessing outputs
+data_generation/RDB_datasets/
+data_generation/single_table_datasets/
+data_preprocessing/RDB_datasets/
+model_pretrain/datasets/
+model_pretrain/rdb_datasets/
+model_pretrain/pretrain_datasets/
+
+# Training/evaluation outputs
+model_pretrain/outputs/
+model_pretrain/checkpoints/*.pt
+!model_pretrain/checkpoints/RDBPFN/model_eval00528.pt
+!model_pretrain/checkpoints/RDBPFN_single/model_eval00360.pt

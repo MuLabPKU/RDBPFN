@@ -1,0 +1,6 @@
+defaults:
+  - base_model
+  - _self_
+
+name: xgboost
+checkpoint_path: null

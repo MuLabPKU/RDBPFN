@@ -1,0 +1,25 @@
+num_rows:
+  default: 1000
+  parse_rules:
+    - max_input: 100
+      multiplier: 10.0
+      offset: 1000
+    - max_input: 200000
+      multiplier: 0.015
+      offset: 2000
+    - multiplier: 0.0
+      offset: 5000
+  fluctuation_ratio: 0.2
+  min: 1000
+  max: 5000
+
+num_cols:
+  default: 5
+  parse_rules:
+    min_threshold: 12
+    min_value: 12
+    max_threshold: 24
+    max_value: 24
+  fluctuation_ratio: 1.0
+  min: 12
+  max: 24

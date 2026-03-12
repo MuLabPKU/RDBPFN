@@ -1,0 +1,8 @@
+defaults:
+  - base_model
+  - _self_
+
+name: random_forest
+checkpoint_path: null
+eval_chunk_size_override: 0
+

@@ -1,0 +1,8 @@
+defaults:
+  - base_model
+  - _self_
+
+name: tabiclv1
+checkpoint_path: null
+tabicl:
+  n_estimators: null

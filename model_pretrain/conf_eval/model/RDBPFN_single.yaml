@@ -1,0 +1,19 @@
+defaults:
+  - base_model
+  - _self_
+
+name: nanopfn
+checkpoint_path: checkpoints/RDBPFN_single/model_eval00360.pt
+nanopfn:
+  type: base
+  embedding_size: 96
+  num_attention_heads: 4
+  mlp_hidden_size: 192
+  num_layers: 6
+  num_outputs: 2
+  num_category_buckets: 10
+  per_column_embeddings: false
+  sort_category_embeddings: false
+  invariant_noise_encoder: false
+  dual_feature_attention: false
+  category_as_numeric: false
