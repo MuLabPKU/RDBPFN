@@ -1,0 +1,9 @@
+customer_id,segment,signup_days,label
+C001,retail,920,0
+C002,retail,640,0
+C003,smb,500,1
+C004,enterprise,840,0
+C005,smb,210,1
+C006,retail,120,1
+C007,smb,330,
+C008,enterprise,760,

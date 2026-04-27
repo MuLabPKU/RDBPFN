@@ -11,6 +11,7 @@ The v1 inference package supports:
 - numeric-only RDBPFN backbone
 - local checkpoint loading from `inference/checkpoints/`
 - flat `numpy` / `pandas` inputs
+- small raw relational databases through optional Featuretools DFS
 - binary classification
 - multiclass classification via one-vs-rest
 - ensembles to increase context size
@@ -21,6 +22,12 @@ From the `inference/` directory:
 
 ```bash
 pip install numpy pandas scikit-learn torch
+```
+
+For raw relational database inference, also install Featuretools:
+
+```bash
+pip install featuretools
 ```
 
 ## Run
@@ -77,6 +84,53 @@ prob = clf.predict_proba(test_df.drop(columns=["label"]))
 pred = clf.predict(test_df.drop(columns=["label"]))
 ```
 
+### Raw Relational Tables
+
+Relational inference first synthesizes one task-level feature table with
+Featuretools DFS, then calls the same flat `RDBPFNClassifier`.
+
+```python
+import pandas as pd
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path("src").resolve()))
+
+from src.relational import (
+    RDBDFSConfig,
+    RDBPFNRelationalClassifier,
+    RDBTaskSpec,
+    RelationalDatabase,
+    Relationship,
+)
+
+rdb = RelationalDatabase(
+    tables={
+        "customers": pd.read_csv("customers.csv"),
+        "orders": pd.read_csv("orders.csv"),
+    },
+    relationships=[
+        Relationship("customers", "customer_id", "orders", "customer_id"),
+    ],
+)
+
+task = RDBTaskSpec(
+    target_table="customers",
+    entity_id="customer_id",
+    target="label",
+    time_column="snapshot_time",  # optional cutoff-time column
+)
+
+clf = RDBPFNRelationalClassifier.from_pretrained("RDBPFN")
+
+# If task_rows is omitted, fit() uses labeled rows in the target table.
+clf.fit(rdb, task, dfs_config=RDBDFSConfig(max_depth=2))
+
+test_rows = pd.read_csv("customers_to_predict.csv")
+prob = clf.predict_proba(rdb, test_rows)
+pred = clf.predict(rdb, test_rows)
+```
+
 ## Script Usage
 
 ```bash
@@ -97,6 +151,19 @@ python predict_csv.py \
   --output examples/demo_predictions.csv
 ```
 
+Relational CLI example:
+
+```bash
+python predict_rdb.py \
+  --table customers=examples/rdb/customers.csv \
+  --table orders=examples/rdb/orders.csv \
+  --relationship customers,customer_id,orders,customer_id \
+  --target-table customers \
+  --entity-id customer_id \
+  --target label \
+  --output examples/rdb/predictions.csv
+```
+
 ## Demo
 
 Run the built-in sklearn demo from the `inference/` directory:
@@ -111,6 +178,13 @@ Run the multiclass demo from the `inference/` directory:
 python demo_multiclass.py
 ```
 
+Run the tiny relational demo from the `inference/` directory after installing
+Featuretools:
+
+```bash
+python demo_relational.py
+```
+
 ## Notes
 
 - The estimator is sklearn-like: `fit`, `predict_proba`, `predict`.
@@ -122,3 +196,6 @@ python demo_multiclass.py
 - The ensemble number is computed automatically as `ceil(n_train / 1024)`.
 - For multiclass tasks, `predict_proba()` uses one-vs-rest binary heads and
   normalizes the per-class positive probabilities to sum to 1.
+- Relational inference is intentionally simple. Provide explicit relationship
+  columns, keep primary keys unique, and use a cutoff-time column when future
+  rows would otherwise leak into DFS features.
