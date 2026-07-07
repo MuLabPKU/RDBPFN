@@ -1,4 +1,4 @@
-# RDB_PFN
+# [ICML 2026] RDB-PFN
 
 This is the official repository for the paper [Relational In-Context Learning via Synthetic Pre-training with Structural Prior](https://arxiv.org/abs/2603.03805). It presents a synthetic pre-training framework for relational-database foundation models.
 

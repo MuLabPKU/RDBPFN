@@ -109,6 +109,7 @@ These outputs are consumed later by [../data_preprocessing/RDB_processing.sh](..
 
 - Output directories and dataset counts are currently hard-coded in the shell script.
 - The `--use_row_gnn` flag controls whether row-level graph structure is used during generation.
+- Known reproduction note: in the original released generation code, the later bidirectional GNN pass is not invoked. As a result, the generated `wGNN` and `woGNN` variants follow the same implementation path and both behave like single-directional row-GNN generation. We keep this behavior unchanged to reproduce the original work.
 - The current default script is large-scale and may require substantial runtime (could take days) and storage. You can modify the script to generate smaller datasets or more aggressive parallelization for testing.
 
 ## Handoff to Preprocessing
