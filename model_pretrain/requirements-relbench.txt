@@ -1,0 +1,11 @@
+# Inference-only dependencies; install a compatible PyTorch build separately.
+# Reference environment: Python 3.11, torch 2.7.1+cu118.
+numpy==2.3.5
+pandas==2.3.3
+scikit-learn==1.7.2
+PyYAML==6.0.3
+pyarrow==20.0.0
+pydantic==2.12.5
+huggingface-hub==0.36.2
+duckdb==1.5.6
+relbench @ git+https://github.com/stanford-star/relbench.git@ecc9621f53d9b7edd33e0616e66fbaaae4dd99d2

@@ -126,6 +126,8 @@ class TransformerEncoderLayer(nn.Module):
         self.norm3 = LayerNorm(
             embedding_size, eps=layer_norm_eps, device=device, dtype=dtype
         )
+        # Opt in during large-context inference; preserve the training/default path.
+        self.memory_efficient_attention = False
 
     def forward(
         self,
@@ -145,11 +147,11 @@ class TransformerEncoderLayer(nn.Module):
                 mask = mask.unsqueeze(1).expand(batch_size, rows_size, col_size)
             mask = mask.reshape(batch_size * rows_size, col_size)
             mask = mask.unsqueeze(-1).to(dtype=torch.bool, device=src.device)
-            numeric_out = self.numeric_feature_attention(src, src, src)[0]
-            categorical_out = self.categorical_feature_attention(src, src, src)[0]
+            numeric_out = self.numeric_feature_attention(src, src, src, need_weights=not self.memory_efficient_attention)[0]
+            categorical_out = self.categorical_feature_attention(src, src, src, need_weights=not self.memory_efficient_attention)[0]
             src = torch.where(mask, categorical_out, numeric_out) + src
         else:
-            src = self.self_attention_between_features(src, src, src)[0] + src
+            src = self.self_attention_between_features(src, src, src, need_weights=not self.memory_efficient_attention)[0] + src
         src = src.reshape(batch_size, rows_size, col_size, embedding_size)
         src = self.norm1(src)
         src = src.transpose(1, 2)
@@ -158,11 +160,13 @@ class TransformerEncoderLayer(nn.Module):
             src[:, :train_test_split_index],
             src[:, :train_test_split_index],
             src[:, :train_test_split_index],
+            need_weights=not self.memory_efficient_attention,
         )[0]
         src_right = self.self_attention_between_datapoints(
             src[:, train_test_split_index:],
             src[:, :train_test_split_index],
             src[:, :train_test_split_index],
+            need_weights=not self.memory_efficient_attention,
         )[0]
         src = torch.cat([src_left, src_right], dim=1) + src
         src = src.reshape(batch_size, col_size, rows_size, embedding_size)

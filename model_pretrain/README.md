@@ -141,6 +141,72 @@ cd model_pretrain
 python -m src.eval_csv model=RDBPFN dataset=clf_npz
 ```
 
+## RelBench Context Ensembles
+
+Run the released checkpoint with **4096 context rows × up to 8 disjoint windows**
+on the 12 classification tasks, reusing the processed DFS data. No retraining is
+needed. Predictions are averaged equally across windows; small tasks stop when
+eligible training rows are exhausted, with a shorter final window if needed.
+
+**Setup.** Use Python 3.11 and a compatible PyTorch build (tested with
+`torch==2.7.1+cu118` on a 24 GB RTX 4090). From the repository root:
+
+```bash
+pip install -r model_pretrain/requirements-relbench.txt
+cd model_pretrain
+```
+
+Use the [processed datasets](https://huggingface.co/datasets/yamboo/RDB_PFN)
+with `metadata.yaml` and task NPZ files in `rdb_datasets/rel-{amazon,avito,event,f1,hm,stack,trial}-dfs-2/`.
+The default checkpoint is `checkpoints/RDBPFN/model_eval00528.pt`, included in
+this repository. Its SHA256 is
+`ea9aa1bfbea5fa3fb8d88a043d7b8b5eb0e191dc4049e3e2a89822318e134bfb`.
+Existing cache features are reused; they must have been generated using only
+information strictly before each prediction timestamp.
+
+**Predict.** From `model_pretrain/`, use a fresh output directory:
+
+```bash
+python -m src.eval_relbench_context \
+  --split test --configs 4096x8 --seed 0 --chunk-size 2000 \
+  --revision 21d7284df2a9621c71f21bc4a1a30b7e8effb8dd \
+  --output-root outputs/relbench_4096x8 --device cuda:0
+```
+
+The official dataset revision is pinned. Contexts use training rows only, with
+seeded sampling that preserves earlier windows when context capacity increases.
+The runner aligns cached rows by entity ID and timestamp and resolves binary
+label encodings using training labels. It uses float32 memory-efficient attention
+without changing checkpoint weights. Test labels are read for scoring only.
+
+**Validate and package locally:**
+
+```bash
+python -m src.package_relbench_context \
+  --runs outputs/relbench_4096x8 --configuration 4096x8 \
+  --output-root outputs/relbench_4096x8_package
+```
+
+This collects the 12 canonical test CSVs, validates against the same pinned
+benchmark revision, and writes `submission-classification.zip` plus
+`validation.json`. Neither command uploads files or opens a submission issue.
+The reference run's mean task AUROC is **75.06018%**. Matching this result also
+requires matching processed features; key alignment alone does not prove that
+independently generated or downloaded caches have identical feature values.
+
+Use `--data-root` or `--checkpoint` for other input locations. `--chunk-size`
+controls query batching and is automatically reduced on CUDA out-of-memory.
+Use `--split val --configs 1024x1 4096x4 4096x8` and a separate output directory
+for validation comparisons; do not use test scores to select configurations.
+Runs save data/checkpoint hashes, context indices, scores and member predictions.
+The packager also accepts multiple `--runs` covering disjoint task subsets.
+
+Alignment, sampling, attention and packaging checks:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
 ## Pretrain the Model
 
 Training is Hydra-based and starts from [src/train.py](src/train.py).

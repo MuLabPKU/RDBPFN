@@ -36,6 +36,9 @@ If you are new to the repository, read the documentation in this order:
 3. [data_preprocessing/README.md](data_preprocessing/README.md) to convert raw data into pretraining and evaluation datasets.
 4. [model_pretrain/README.md](model_pretrain/README.md) to evaluate checkpoints or pretrain a model.
 
+For RelBench classification inference with extended contexts and ensembles, see the
+[4096 × 8 usage guide](model_pretrain/README.md#relbench-context-ensembles).
+
 We also provide well-processed pretraining datasets and benchmark datasets formatted for our model at [Huggingface](https://huggingface.co/datasets/yamboo/RDB_PFN). You can download them and use them directly for pretraining and evaluation.
 
 ## End-to-End Pipeline
